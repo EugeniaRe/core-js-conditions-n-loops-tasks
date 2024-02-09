@@ -396,8 +396,26 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const resultMatrix = matrix;
+  const mLength = resultMatrix.length;
+  for (let i = 0; i < Math.floor(mLength / 2); i += 1) {
+    for (let j = 0; j < mLength - 1 - 2 * i; j += 1) {
+      let temp = resultMatrix[i + j][mLength - 1 - i];
+      resultMatrix[i + j][mLength - 1 - i] = resultMatrix[i][i + j];
+      resultMatrix[i][i + j] = temp;
+
+      temp = resultMatrix[mLength - 1 - i][mLength - 1 - i - j];
+      resultMatrix[mLength - 1 - i][mLength - 1 - i - j] =
+        resultMatrix[i][i + j];
+      resultMatrix[i][i + j] = temp;
+
+      temp = resultMatrix[mLength - 1 - i - j][i];
+      resultMatrix[mLength - 1 - i - j][i] = resultMatrix[i][i + j];
+      resultMatrix[i][i + j] = temp;
+    }
+  }
+  return resultMatrix;
 }
 
 /**
@@ -415,6 +433,47 @@ function rotateMatrix(/* matrix */) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(/* arr */) {
+  // const resArr = arr;
+  // if (resArr.length > 1) {
+  //   const arrLength = resArr.length;
+  //   const midIndex = Math.floor(resArr.length / 2);
+  //   const left = [];
+  //   for (let i = 0; i < midIndex; i += 1) {
+  //     left.push(resArr[i]);
+  //   }
+  //   const right = [];
+  //   for (let i = midIndex; i < arrLength; i += 1) {
+  //     right.push(resArr[i]);
+  //   }
+  //   sortByAsc(left);
+  //   sortByAsc(right);
+
+  //   let leftIndex = 0;
+  //   let rightIndex = 0;
+  //   let arrIndex = 0;
+  //   while (leftIndex < left.length && rightIndex < right.length) {
+  //     if (left[leftIndex] < right[rightIndex]) {
+  //       resArr[arrIndex] = left[leftIndex];
+  //       leftIndex += 1;
+  //     } else {
+  //       resArr[arrIndex] = right[rightIndex];
+  //       rightIndex += 1;
+  //     }
+  //     arrIndex += 1;
+  //   }
+  //   while (leftIndex < left.length) {
+  //     resArr[arrIndex] = left[leftIndex];
+  //     leftIndex += 1;
+  //     arrIndex += 1;
+  //   }
+  //   while (rightIndex < right.length) {
+  //     resArr[arrIndex] = right[rightIndex];
+  //     rightIndex += 1;
+  //     arrIndex += 1;
+  //   }
+  // }
+  // return resArr;
+
   throw new Error('Not implemented');
 }
 
