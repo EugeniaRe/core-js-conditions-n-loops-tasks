@@ -32,53 +32,28 @@
 // }
 
 
+const sortByAsc = (arr) => {
+  // Условие остановки, выхода из рекурсии, возвращем массив с 1 элементом
+  if (arr.length < 2) return arr;
+  // Выбираем опорный элемент
+  let pivot = arr[0];
+  // Определяем массивы для тех, что меньше и больше опорного
+  const left = [];
+  const right = [];
 
-function sortByAsc(arr) {
-  const resArr = arr;
-  if (resArr.length > 1) {
-    const arrLength = resArr.length;
-    const midIndex = Math.floor(resArr.length / 2);
-    const left = [];
-    for (let i = 0; i < midIndex; i += 1) {
-      left.push(resArr[i]);
-    }
-    const right = [];
-    for (let i = midIndex; i < arrLength; i += 1) {
-      right.push(resArr[i]);
-    }
-    // const left = resArr.slice(0, midIndex);
-    // const right = resArr.slice(midIndex);
-    sortByAsc(left);
-    sortByAsc(right);
-
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let arrIndex = 0;
-    while (leftIndex < left.length && rightIndex < right.length) {
-      if (left[leftIndex] < right[rightIndex]) {
-        resArr[arrIndex] = left[leftIndex];
-        leftIndex += 1;
-      } else {
-        resArr[arrIndex] = right[rightIndex];
-        rightIndex += 1;
-      }
-      arrIndex += 1;
-    }
-    while (leftIndex < left.length) {
-      resArr[arrIndex] = left[leftIndex];
-      leftIndex += 1;
-      arrIndex += 1;
-    }
-    while (rightIndex < right.length) {
-      resArr[arrIndex] = right[rightIndex];
-      rightIndex += 1;
-      arrIndex += 1;
+  // Проходим циклом по всем элементам из массива и разносим их в массивы созданные ранее согласно условию, больше опорного - в правый, меньше - в левый
+  for (let i = 1; i < arr.length; i++) {
+    if (pivot > arr[i]) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
     }
   }
-  return resArr;
+  // Рекурсивно повторяем процесс для новых двух массивов, текущий опорный элемент - кладем как первый в правый массив.
+  return sortByAsc(left).concat(pivot, sortByAsc(right));
 }
 
-
+//console.log(sortByAsc([-2, 9, 5, -3]));
 
 
 function rotateMatrix(matrix) {
@@ -103,11 +78,6 @@ function rotateMatrix(matrix) {
   return resultMatrix;
 }
 
-console.log(rotateMatrix(
-  [[1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
-  ]));
 
 /*
 .shuffleChar('', 2), '043215');
@@ -159,3 +129,89 @@ console.log(rotateMatrix(
 //   colStart += 1;
 //   colEnd -= 1;
 // }
+
+
+function findNext(number) {
+  let tempNumber = number;
+
+  const numberArr = [];
+  while (tempNumber > 0) {
+    numberArr.push(tempNumber % 10);
+    tempNumber = Math.floor(tempNumber / 10);
+  }
+  numberArr.reverse();
+
+  const NumberArrLength = numberArr.length;
+  let smallestDigit = 0;
+  let smallestIndex = NumberArrLength - 1;
+
+  for (let i = smallestIndex; i > 0; i -= 1) {
+    if (numberArr[i] > numberArr[i - 1]) {
+      smallestDigit = numberArr[i - 1];
+      smallestIndex = i;
+      break;
+    }
+  }
+  if (
+    smallestIndex === 0 &&
+    numberArr[smallestIndex + 1] >= numberArr[smallestIndex + 2]
+  ) {
+    return number;
+  }
+
+  let endSmallestIndex = smallestIndex;
+  for (let i = smallestIndex + 1; i < NumberArrLength; i += 1) {
+    if (
+      numberArr[i] > smallestDigit &&
+      numberArr[i] < numberArr[smallestIndex]
+    ) {
+      endSmallestIndex = i;
+    }
+  }
+
+  const temp = numberArr[endSmallestIndex];
+  numberArr[endSmallestIndex] = numberArr[smallestIndex - 1];
+  numberArr[smallestIndex - 1] = temp;
+
+  let resultNumber = 0;
+  console.log(numberArr);
+  for (let i = 0; i < smallestIndex; i += 1) {
+    resultNumber = resultNumber * 10 + numberArr[i];
+  }
+  console.log(resultNumber);
+
+  const headArr = [];
+  for (let i = 0; i < smallestIndex; i += 1) {
+    headArr.push(numberArr[i]);
+  }
+  console.log(headArr);
+  const endArr = [];
+  for (let i = smallestIndex; i < NumberArrLength; i += 1) {
+    endArr.push(numberArr[i]);
+  }
+  endArr.sort();
+  for (let i = 0; i < NumberArrLength - smallestIndex; i += 1) {
+    resultNumber = resultNumber * 10 + endArr[i];
+  }
+  let res = 0;
+  const resultArr = headArr.concat(endArr);
+  console.log(headArr.concat(endArr));
+  for (let i = 0; i < resultArr.length; i += 1) {
+    res += resultArr[i] + 10 ** i;
+  }
+  return res;
+}
+
+
+//console.log(number.reverse());
+console.log(findNext(12345));
+
+/*
+* 12345    => 12354
+ * 123450   => 123504
+ * 12344    => 12434
+ * 123440   => 124034
+ * 1203450  => 1203504
+ * 90822    => 92028
+ * 321321   => 322113
+ * */
